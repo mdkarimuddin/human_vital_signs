@@ -19,7 +19,7 @@ Built to showcase capabilities relevant to **wearable health technology companie
 
 - ✅ **200K+ records** of real vital signs data
 - ✅ **ML Classification**: Risk category prediction (XGBoost, Random Forest)
-- ✅ **Time Series Forecasting**: LSTM/Prophet for vital signs prediction
+- ✅ **Time Series Forecasting**: LSTM (Deep Learning), Linear Regression, Moving Average
 - ✅ **Multi-modal features**: HR, HRV, BP, Temperature, SpO2, Respiratory Rate
 - ✅ **Explainable AI**: SHAP analysis for feature importance
 - ✅ **Production-ready** code structure
@@ -88,15 +88,27 @@ python src/ml/04_evaluate_ml.py
 
 ### Run Time Series Forecasting Pipeline
 
+**Note**: For LSTM training, ensure PyTorch is available:
+```bash
+module load pytorch/2.7  # On Puhti HPC
+# OR
+pip install torch        # Local installation
+```
+
 ```bash
 # Step 1: Prepare Time Series Data
 python src/forecasting/01_prepare_ts_data.py
 
-# Step 2: Train Forecasters
+# Step 2: Train Forecasters (includes LSTM if PyTorch available)
 python src/forecasting/02_train_forecasters.py
 
-# Step 3: Evaluate Forecasts
+# Step 3: Evaluate Forecasts (evaluates all models including LSTM)
 python src/forecasting/03_evaluate_forecasts.py
+```
+
+**Alternative**: Use simple forecasting methods (no PyTorch required):
+```bash
+python src/forecasting/02_train_forecasters_simple.py
 ```
 
 ## 🔬 Methodology
@@ -128,9 +140,14 @@ python src/forecasting/03_evaluate_forecasts.py
 - Oxygen Saturation
 
 **Models**:
-- Moving Average (baseline)
-- Linear Regression (simple forecasting)
-- LSTM (Long Short-Term Memory) - Deep learning approach
+- **Moving Average** (baseline method)
+- **Linear Regression** (simple forecasting)
+- **LSTM (Long Short-Term Memory)** - Deep learning neural network
+  - Architecture: 2-layer LSTM with 64 hidden units
+  - Sequence length: 24 hours (multi-variate input)
+  - Input features: Heart Rate, Systolic BP, Diastolic BP, Temperature, Oxygen Saturation
+  - Training: 50 epochs with Adam optimizer (learning rate: 0.001)
+  - Framework: PyTorch
 - Evaluation: MAE, RMSE, MAPE
 
 *Note: Prophet implementation available but not used in final analysis*
@@ -172,17 +189,25 @@ python src/forecasting/03_evaluate_forecasts.py
 
 **Key Findings**:
 - Excellent forecasting accuracy with <2% MAPE across all models
-- LSTM and Linear Regression perform similarly (MAE ~1.18), both slightly better than Moving Average
+- **LSTM Performance**: MAE=1.18, RMSE=1.50, MAPE=1.48% - matches Linear Regression performance
+- LSTM demonstrates deep learning capability for time series forecasting
+- Both LSTM and Linear Regression outperform Moving Average baseline
 - Dataset: 3,334 hourly aggregated records → 2,667 train / 667 test
 - Forecasting target: Heart Rate (bpm)
-- LSTM model uses 24-hour sequences with 2-layer architecture (64 hidden units)
+- **LSTM Architecture Details**:
+  - Multi-variate input (5 features: HR, Systolic BP, Diastolic BP, Temperature, SpO2)
+  - 24-hour lookback window for sequence prediction
+  - 2-layer LSTM with dropout (0.2) for regularization
+  - Trained on CPU (PyTorch 2.7)
+  - Model saved: `models/lstm_forecaster.pt` (207 KB)
 
 **Outputs Generated**:
 - ✅ Forecast plots (actual vs predicted) for all models
-- ✅ LSTM forecast visualization
+- ✅ **LSTM forecast visualization** (`lstm_forecast_plot.png`) - shows LSTM predictions vs actual
 - ✅ Error distribution plots
 - ✅ Scatter plots (predicted vs actual)
-- ✅ Forecast metrics JSON
+- ✅ Forecast metrics JSON (includes LSTM metrics)
+- ✅ Trained LSTM model files (`lstm_forecaster.pt`, `lstm_scaler.pkl`)
 
 ## 💡 Relevance to Oura Ring
 
@@ -190,7 +215,8 @@ This project demonstrates:
 
 ✅ **Multi-modal vital signs analysis** (HR, HRV, BP, Temperature)  
 ✅ **Risk prediction** (health status classification)  
-✅ **Time series forecasting** (predictive health monitoring)  
+✅ **Time series forecasting** (predictive health monitoring with LSTM)  
+✅ **Deep learning** (LSTM neural networks for sequential data)  
 ✅ **Explainable AI** (SHAP for interpretability)  
 ✅ **Production-ready** code structure  
 ✅ **Real-world health data** processing

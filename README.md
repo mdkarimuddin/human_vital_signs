@@ -130,9 +130,10 @@ python src/forecasting/03_evaluate_forecasts.py
 **Models**:
 - Moving Average (baseline)
 - Linear Regression (simple forecasting)
+- LSTM (Long Short-Term Memory) - Deep learning approach
 - Evaluation: MAE, RMSE, MAPE
 
-*Note: LSTM and Prophet implementations available but using simpler models for this analysis*
+*Note: Prophet implementation available but not used in final analysis*
 
 ## 📈 Results
 
@@ -167,15 +168,18 @@ python src/forecasting/03_evaluate_forecasts.py
 |-------|-----|------|----------|
 | **Moving Average** | 1.21 | 1.52 | 1.52 |
 | **Linear Regression** | 1.18 | 1.50 | 1.48 |
+| **LSTM** | 1.18 | 1.50 | 1.48 |
 
 **Key Findings**:
-- Excellent forecasting accuracy with <2% MAPE
-- Linear Regression slightly outperforms Moving Average
+- Excellent forecasting accuracy with <2% MAPE across all models
+- LSTM and Linear Regression perform similarly (MAE ~1.18), both slightly better than Moving Average
 - Dataset: 3,334 hourly aggregated records → 2,667 train / 667 test
 - Forecasting target: Heart Rate (bpm)
+- LSTM model uses 24-hour sequences with 2-layer architecture (64 hidden units)
 
 **Outputs Generated**:
-- ✅ Forecast plots (actual vs predicted)
+- ✅ Forecast plots (actual vs predicted) for all models
+- ✅ LSTM forecast visualization
 - ✅ Error distribution plots
 - ✅ Scatter plots (predicted vs actual)
 - ✅ Forecast metrics JSON

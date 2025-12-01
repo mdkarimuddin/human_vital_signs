@@ -65,6 +65,20 @@ def main():
         lr_metrics = None
         y_test_lr, y_pred_lr = None, None
     
+    # Evaluate LSTM (if available)
+    if 'y_test_lstm' in predictions_df.columns and 'y_pred_lstm' in predictions_df.columns:
+        print("\n=== LSTM Forecast Evaluation ===")
+        y_test_lstm = predictions_df['y_test_lstm'].values
+        y_pred_lstm = predictions_df['y_pred_lstm'].values
+        
+        lstm_metrics = calculate_metrics(y_test_lstm, y_pred_lstm)
+        print(f"MAE:  {lstm_metrics['MAE']:.4f}")
+        print(f"RMSE: {lstm_metrics['RMSE']:.4f}")
+        print(f"MAPE: {lstm_metrics['MAPE']:.2f}%")
+    else:
+        lstm_metrics = None
+        y_test_lstm, y_pred_lstm = None, None
+    
     # 1. Forecast Plot - Moving Average
     print("\n1. Creating forecast plots...")
     if y_test_ma is not None and y_pred_ma is not None:
@@ -97,6 +111,22 @@ def main():
         plt.savefig(OUTPUT_DIR / 'lr_forecast_plot.png', dpi=300)
         plt.close()
         print("✅ Saved: lr_forecast_plot.png")
+    
+    # 2b. Forecast Plot - LSTM (if available)
+    if y_test_lstm is not None and y_pred_lstm is not None:
+        plt.figure(figsize=(14, 6))
+        plot_len = min(200, len(y_test_lstm))
+        plt.plot(y_test_lstm[:plot_len], label='Actual', alpha=0.7)
+        plt.plot(y_pred_lstm[:plot_len], label='LSTM Forecast', alpha=0.7)
+        plt.title('LSTM Forecast: Heart Rate')
+        plt.xlabel('Time Step')
+        plt.ylabel('Heart Rate (bpm)')
+        plt.legend()
+        plt.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(OUTPUT_DIR / 'lstm_forecast_plot.png', dpi=300)
+        plt.close()
+        print("✅ Saved: lstm_forecast_plot.png")
     
     # 3. Error Distribution
     print("\n2. Creating error distribution...")
@@ -142,6 +172,8 @@ def main():
         metrics_dict['Moving_Average'] = ma_metrics
     if lr_metrics:
         metrics_dict['Linear_Regression'] = lr_metrics
+    if lstm_metrics:
+        metrics_dict['LSTM'] = lstm_metrics
     
     import json
     with open(OUTPUT_DIR / 'forecast_metrics.json', 'w') as f:

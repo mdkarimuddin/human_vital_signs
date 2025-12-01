@@ -3,10 +3,10 @@ data/raw/*.csv
 data/processed/*.csv
 data/raw/*.zip
 
-# Models
-models/*.pkl
-models/*.pt
-models/*.json
+# Models (commented out to include trained models in repo)
+# models/*.pkl
+# models/*.pt
+# models/*.json
 
 # Python
 __pycache__/

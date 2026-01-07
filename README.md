@@ -3,6 +3,7 @@
 Comprehensive analysis of human vital signs data combining **machine learning classification** and **time series forecasting** - demonstrating capabilities for wearable health technology applications like Oura Ring.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![ML](https://img.shields.io/badge/ML-Classification%20%7C%20Forecasting-orange.svg)
 ![Status](https://img.shields.io/badge/Status-Complete-success.svg)
 
@@ -243,7 +244,7 @@ Postdoctoral Researcher, University of Helsinki
 
 ## 📜 License
 
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

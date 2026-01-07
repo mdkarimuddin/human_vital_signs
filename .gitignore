@@ -3,10 +3,10 @@ data/raw/*.csv
 data/processed/*.csv
 data/raw/*.zip
 
-# Models (commented out to include trained models in repo)
-# models/*.pkl
-# models/*.pt
-# models/*.json
+# Models (exclude large model files)
+models/*.pkl
+models/*.pt
+models/*.json
 
 # Python
 __pycache__/
@@ -18,12 +18,21 @@ venv/
 # Jupyter
 .ipynb_checkpoints/
 
-# Outputs (keeping some for portfolio)
+# Outputs (exclude large output files)
 outputs/*.zip
 outputs/*.csv
-# outputs/*.png  # Uncomment to exclude all images
-# outputs/*.json  # Uncomment to exclude all JSON
+outputs/*.png
+outputs/*.json
 
 # OS
 .DS_Store
 
+
+# Internal documentation (not for public repo)
+*_STATUS.md
+*_SUMMARY.md
+*_PLAN.md
+*SETUP*.md
+*PUHTI*.md
+*GITHUB*.md
+*_STEPS.md
